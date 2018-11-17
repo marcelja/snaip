@@ -20,20 +20,21 @@ nx.draw_networkx_nodes(G, pos,
                        nodelist=persons[0:4],
                        node_color='r',
                        node_size=2000,
-                       alpha=0.8)
+                       alpha=0.6)
 nx.draw_networkx_nodes(G, pos,
                        nodelist=persons[4:9],
                        node_color='b',
                        node_size=2000,
-                       alpha=0.8)
+                       alpha=0.6)
 
 nx.draw_networkx_edges(G, pos, width=1.0, alpha=0.5)
 ### example edges:
 # nx.draw_networkx_edges(G, pos,
 #                        edgelist=[(4, 5), (5, 6), (6, 7), (7, 4)],
 #                        width=8, alpha=0.5, edge_color='b')
-nx.draw_networkx_labels(G, pos, font_size=13)
+nx.draw_networkx_labels(G, pos, font_size=14)
 
 plt.axis('off')
-plt.subplots_adjust(bottom=0.05, top=0.95)
-plt.show()
+plt.subplots_adjust(bottom=0.03, top=0.97)
+
+plt.savefig('filename.png', dpi=300)
