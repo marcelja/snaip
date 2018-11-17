@@ -22,7 +22,12 @@ nx.draw_networkx_nodes(G, pos,
                        node_size=2000,
                        alpha=0.6)
 nx.draw_networkx_nodes(G, pos,
-                       nodelist=persons[4:9],
+                       nodelist=persons[7:8],
+                       node_color='y',
+                       node_size=2000,
+                       alpha=0.6)
+nx.draw_networkx_nodes(G, pos,
+                       nodelist=persons[4:7],
                        node_color='b',
                        node_size=2000,
                        alpha=0.6)
