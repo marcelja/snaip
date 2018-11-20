@@ -9,17 +9,11 @@ for c in connections:
 	G.add_edge(persons[c[0]], persons[c[1]])
 
 pos = nx.circular_layout(G)
-
-
 bc = nx.edge_betweenness_centrality(G)
 
 for x,y in bc:
 	value = bc[(x,y)]
 	bc[(x,y)] = round(value,2)
-
-for uu, vv, dd in G.edges().data():
-	dd['betweenness']= round(bc[(uu,vv)], 2)
-	print(uu,vv,dd)
 
 # nx.draw_networkx_nodes(G, pos,
 #                        nodelist=persons,
