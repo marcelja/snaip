@@ -1,4 +1,5 @@
 import os
+import json
 from validate_email import validate_email
 
 
@@ -39,6 +40,7 @@ class Enron():
                 self.high_connections.append((key, value))
         print('Sort high connections.')
         self.high_connections.sort(key=lambda x: x[1], reverse=True)
+        print(self.high_connections[:40])
 
     def scan_inbox(self, inbox):
         for folder in inbox.folders:
@@ -71,6 +73,14 @@ class Enron():
         else:
             self.connections[identifier] = 1
 
+    def store_connections_json(self, filename):
+        with open(filename, 'w') as f:
+            json.dump(self.connections, f)
+
+    def load_connections_json(self, filename):
+        with open(filename, 'r') as f:
+            self.connections = json.load(f)
+
     @staticmethod
     def parse_address(address_field, file_path):
         address_field = address_field.replace('To:', '').replace('From:', '')
@@ -94,7 +104,9 @@ def file_names(directory):
 
 def main():
     enron = Enron('../maildir/')
-    enron.create_inboxes()
+    # enron.create_inboxes()
+    # enron.store_connections_json('connections.json')
+    enron.load_connections_json('connections.json')
     enron.highest_connections()
     import pdb;pdb.set_trace()
 
