@@ -2,8 +2,11 @@ import os
 
 
 class Inbox():
-    def __init__(self, name):
+    def __init__(self, name, directory):
         self.name = name
+        self.directory = directory
+        self.folders = file_names(directory + name)
+        print(self.folders)
 
     def __str__(self):
         return self.name
@@ -15,6 +18,13 @@ class Enron():
         self.inbox_names = file_names(directory)
         print(self.inbox_names)
         print('number of inboxes:', len(self.inbox_names))
+        self.inboxes = []
+
+    def create_inboxes(self):
+        for inbox_name in self.inbox_names:
+            self.inboxes.append(Inbox(inbox_name, self.directory))
+            print(self.inboxes[-1])
+            break
 
 
 def file_names(directory):
@@ -24,8 +34,7 @@ def file_names(directory):
 
 def main():
     enron = Enron('../maildir/')
-    inbox = Inbox(enron.inbox_names[0])
-    print(inbox)
+    enron.create_inboxes()
 
 
 if __name__ == '__main__':
