@@ -12,8 +12,14 @@ class Inbox():
 class Enron():
     def __init__(self, directory):
         self.directory = directory
-        self.inbox_names = os.listdir(directory)
+        self.inbox_names = file_names(directory)
+        print(self.inbox_names)
         print('number of inboxes:', len(self.inbox_names))
+
+
+def file_names(directory):
+    files = sorted(os.listdir(directory))
+    return [x for x in files if x[0] != '.']
 
 
 def main():
