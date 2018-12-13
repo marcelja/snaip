@@ -108,7 +108,6 @@ def main():
     # enron.store_connections_json('connections.json')
     enron.load_connections_json('connections.json')
     enron.highest_connections()
-    import pdb;pdb.set_trace()
 
 
 if __name__ == '__main__':
