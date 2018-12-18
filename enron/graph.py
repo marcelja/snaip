@@ -27,7 +27,8 @@ class Graph():
                                alpha=0.6)
         nx.draw_networkx_labels(g, pos, font_size=6)
 
-        nx.draw_networkx_edges(g, pos, width=1.0, alpha=0.5)
+        widths = [c[1] / 200 for c in self.connections]
+        nx.draw_networkx_edges(g, pos, alpha=0.8, width=widths)
         nx.draw_networkx_edge_labels(g, pos=nx.kamada_kawai_layout(g),
                                      edge_labels=edge_labels)
 
