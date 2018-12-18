@@ -1,10 +1,12 @@
 import os
 import json
 from validate_email import validate_email
+from textblob import TextBlob
 from graph import Graph
 
 
 MAX_CONNECTIONS = 40
+EMAIL_TOKENS = ['subject', 're', 'fw']
 
 
 class Inbox():
@@ -37,6 +39,7 @@ class Enron():
             self.inboxes.append(Inbox(inbox_name, self.directory))
             print(self.inboxes[-1])
             self.scan_inbox(self.inboxes[-1])
+            return
 
     def highest_connections(self):
         return self.high_connections[:MAX_CONNECTIONS]
@@ -59,33 +62,49 @@ class Enron():
     def scan_inbox(self, inbox):
         for folder in inbox.folders:
             self.scan_folder(inbox.path() + '/' + folder)
+            return
 
     def scan_folder(self, folder_path):
         files = file_names(folder_path)
         for file in files:
             file_path = folder_path + '/' + file
+            print(file_path)
             with open(file_path, 'r') as f:
                 try:
-                    head = [next(f) for x in range(4)]
+                    head = [next(f) for x in range(5)]
                     date = head[1]
                     from_address = self.parse_address(head[2], file_path)
                     to_address = self.parse_address(head[3], file_path)
                     if from_address and to_address:
-                        self.save_or_update_in_dict(from_address, to_address,
-                                                    date)
+                        nouns = self._find_nouns_in_subject(head[4])
+                        self._save_or_update_in_dict(from_address, to_address,
+                                                     date, nouns)
                 except:
                     pass
 
         for folder in folder_names(folder_path):
             self.scan_folder(folder_path + '/' + folder)
 
-    def save_or_update_in_dict(self, from_address, to_address, date):
+    @staticmethod
+    def _find_nouns_in_subject(subject):
+        blob = TextBlob(subject)
+        return [noun for noun in blob.noun_phrases if noun not in EMAIL_TOKENS]
+
+    def _save_or_update_in_dict(self, from_address, to_address, date, nouns):
         sorted_from_to = sorted([from_address, to_address])
         identifier = sorted_from_to[0] + ';' + sorted_from_to[1]
         if identifier in self.connections:
-            self.connections[identifier] += 1
+            self.connections[identifier][0] += 1
         else:
-            self.connections[identifier] = 1
+            self.connections[identifier] = (1, {})
+        self._add_nouns_to_dict(nouns, self.connections[identifier][1])
+
+    def _add_nouns_to_dict(self, nouns, nouns_dict):
+        for noun in nouns:
+            if noun in nouns_dict:
+                nouns_dict[noun] += 1
+            else:
+                nouns_dict[noun] = 1
 
     def store_connections_json(self, filename):
         with open(filename, 'w') as f:
@@ -118,7 +137,9 @@ def file_names(directory):
 
 def main():
     enron = Enron('../maildir/')
-    # enron.create_inboxes()
+    enron.create_inboxes()
+    print(enron.connections)
+    return
     # enron.store_connections_json('connections.json')
     enron.load_connections_json('connections.json')
     enron.sort_high_connections()
