@@ -5,7 +5,7 @@ from textblob import TextBlob
 from graph import Graph
 
 
-MAX_CONNECTIONS = 40
+MAX_CONNECTIONS = 50
 EMAIL_TOKENS = ['subject', 're', 'fw', 'fwd', 'enron']
 HIGH_CONNECTION_THRESHOLD = 50
 

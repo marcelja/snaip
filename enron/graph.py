@@ -23,9 +23,9 @@ class Graph():
         pos = nx.kamada_kawai_layout(g)
         nx.draw_networkx_nodes(g, pos,
                                nodelist=persons,
-                               node_color='r',
+                               node_color=self._node_colors(),
                                node_size=2000,
-                               alpha=0.6)
+                               alpha=0.85)
         nx.draw_networkx_labels(g, pos, font_size=6)
 
         widths = [c[1] / 200 for c in self.connections]
@@ -48,3 +48,7 @@ class Graph():
             splitted = addr.split('@')
             return splitted[0] + '\n(' + splitted[1].split('.')[0] + ')'
         return addr
+
+    def _node_colors(self):
+        return ['skyblue' if '@enron.com' in person else 'r'
+                for person in self.persons]
