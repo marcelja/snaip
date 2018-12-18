@@ -4,7 +4,7 @@ from validate_email import validate_email
 from graph import Graph
 
 
-MAX_CONNECTIONS = 15
+MAX_CONNECTIONS = 40
 
 
 class Inbox():
