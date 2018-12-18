@@ -40,7 +40,6 @@ class Enron():
             self.inboxes.append(Inbox(inbox_name, self.directory))
             print(self.inboxes[-1])
             self.scan_inbox(self.inboxes[-1])
-            return
 
     def highest_connections(self):
         return self.high_connections[:MAX_CONNECTIONS]
