@@ -14,8 +14,9 @@ class Graph():
         edge_labels = {}
 
         persons = list(self.persons)
+        persons = [self._parse_addr(person) for person in self.persons]
         for connection in self.connections:
-            emails = connection[0].split(';')
+            emails = self._parse_email_addresses(connection[0])
             g.add_edge(emails[0], emails[1])
             edge_labels[(emails[0], emails[1])] = connection[2]
 
@@ -36,3 +37,14 @@ class Graph():
 
         plt.axis('off')
         plt.show()
+
+    def _parse_email_addresses(self, email_addresses):
+        addrs = email_addresses.split(';')
+        return self._parse_addr(addrs[0]), self._parse_addr(addrs[1])
+
+    def _parse_addr(self, addr):
+        addr = addr.replace('@enron.com', '')
+        if '@' in addr:
+            splitted = addr.split('@')
+            return splitted[0] + '\n(' + splitted[1].split('.')[0] + ')'
+        return addr
