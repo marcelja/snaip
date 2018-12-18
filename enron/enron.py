@@ -7,6 +7,7 @@ from graph import Graph
 
 MAX_CONNECTIONS = 40
 EMAIL_TOKENS = ['subject', 're', 'fw']
+HIGH_CONNECTION_THRESHOLD = 50
 
 
 class Inbox():
@@ -47,10 +48,10 @@ class Enron():
     def sort_high_connections(self):
         print('Find high connections.')
         for key, value in self.connections.items():
-            if value >= 50:
+            if value[0] >= HIGH_CONNECTION_THRESHOLD:
                 self.high_connections.append((key, value))
         print('Sort high connections.')
-        self.high_connections.sort(key=lambda x: x[1], reverse=True)
+        self.high_connections.sort(key=lambda x: x[1][0], reverse=True)
 
     def unique_persons(self):
         for connection in self.high_connections[:MAX_CONNECTIONS]:
@@ -62,13 +63,11 @@ class Enron():
     def scan_inbox(self, inbox):
         for folder in inbox.folders:
             self.scan_folder(inbox.path() + '/' + folder)
-            return
 
     def scan_folder(self, folder_path):
         files = file_names(folder_path)
         for file in files:
             file_path = folder_path + '/' + file
-            print(file_path)
             with open(file_path, 'r') as f:
                 try:
                     head = [next(f) for x in range(5)]
@@ -96,7 +95,7 @@ class Enron():
         if identifier in self.connections:
             self.connections[identifier][0] += 1
         else:
-            self.connections[identifier] = (1, {})
+            self.connections[identifier] = [1, {}]
         self._add_nouns_to_dict(nouns, self.connections[identifier][1])
 
     def _add_nouns_to_dict(self, nouns, nouns_dict):
@@ -138,7 +137,10 @@ def file_names(directory):
 def main():
     enron = Enron('../maildir/')
     enron.create_inboxes()
-    print(enron.connections)
+    # print(enron.connections)
+    enron.sort_high_connections()
+    print(enron.highest_connections())
+    import pdb;pdb.set_trace()
     return
     # enron.store_connections_json('connections.json')
     enron.load_connections_json('connections.json')
