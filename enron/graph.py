@@ -16,8 +16,10 @@ class Graph():
         persons = [self._parse_addr(person) for person in self.persons]
         for connection in self.connections:
             emails = self._parse_email_addresses(connection[0])
-            g.add_edge(emails[0], emails[1])
+            g.add_edge(emails[0], emails[1], width=connection[1] / 200)
             edge_labels[(emails[0], emails[1])] = connection[2]
+
+        widths = [g[u][v]['width'] for u, v in g.edges()]
 
         pos = nx.kamada_kawai_layout(g)
         nx.draw_networkx_nodes(g, pos,
@@ -27,7 +29,7 @@ class Graph():
                                alpha=0.85)
         nx.draw_networkx_labels(g, pos, font_size=6)
 
-        widths = [c[1] / 200 for c in self.connections]
+        # widths = [c[1] / 200 for c in self.connections]
         nx.draw_networkx_edges(g, pos, alpha=0.8, width=widths)
         nx.draw_networkx_edge_labels(g, pos=nx.kamada_kawai_layout(g),
                                      edge_labels=edge_labels)

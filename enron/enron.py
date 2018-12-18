@@ -143,7 +143,8 @@ def main():
     enron.load_connections_json('connections_nouns.json')
     enron.sort_high_connections()
 
-    number_connections = [30, 50, 100, 200, 500]
+    number_connections = [35, 50, 100, 200, 500]
+    # number_connections = [35, 50]
     for number in number_connections:
         persons = enron.unique_persons(number)
         connections = enron.highest_connections(number)
