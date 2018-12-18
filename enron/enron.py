@@ -1,10 +1,10 @@
 import os
 import json
 from validate_email import validate_email
-# from graph import Graph
+from graph import Graph
 
 
-MAX_CONNECTIONS = 40
+MAX_CONNECTIONS = 15
 
 
 class Inbox():
@@ -125,6 +125,9 @@ def main():
     persons = enron.unique_persons()
     connections = enron.highest_connections()
     print(persons, connections)
+
+    graph = Graph(persons, connections)
+    graph.draw_graph()
 
 
 if __name__ == '__main__':
