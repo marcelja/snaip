@@ -135,14 +135,10 @@ def file_names(directory):
 
 def main():
     enron = Enron('../maildir/')
-    enron.create_inboxes()
+    # enron.create_inboxes()
     # print(enron.connections)
-    enron.sort_high_connections()
-    print(enron.highest_connections())
-    import pdb;pdb.set_trace()
-    return
-    # enron.store_connections_json('connections.json')
-    enron.load_connections_json('connections.json')
+    # enron.store_connections_json('connections_nouns.json')
+    enron.load_connections_json('connections_nouns.json')
     enron.sort_high_connections()
     persons = enron.unique_persons()
     connections = enron.highest_connections()

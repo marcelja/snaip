@@ -15,6 +15,7 @@ class Graph():
         persons = list(self.persons)
         for connection in self.connections:
             emails = connection[0].split(';')
+            print(connection)
             g.add_edge(emails[0], emails[1])
 
         pos = nx.kamada_kawai_layout(g)
