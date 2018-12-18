@@ -4,6 +4,9 @@ from validate_email import validate_email
 # from graph import Graph
 
 
+MAX_CONNECTIONS = 40
+
+
 class Inbox():
     def __init__(self, name, directory):
         self.name = name
@@ -42,14 +45,13 @@ class Enron():
                 self.high_connections.append((key, value))
         print('Sort high connections.')
         self.high_connections.sort(key=lambda x: x[1], reverse=True)
-        print(self.high_connections[:40])
+        print(self.high_connections[:MAX_CONNECTIONS])
 
     def unique_persons(self):
-        for connection in self.high_connections:
+        for connection in self.high_connections[:MAX_CONNECTIONS]:
             email_addresses = connection[0].split(';')
             self.persons.add(email_addresses[0])
             self.persons.add(email_addresses[1])
-        print(self.persons)
 
     def scan_inbox(self, inbox):
         for folder in inbox.folders:
@@ -118,7 +120,6 @@ def main():
     enron.load_connections_json('connections.json')
     enron.highest_connections()
     enron.unique_persons()
-
 
 
 if __name__ == '__main__':
