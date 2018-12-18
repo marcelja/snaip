@@ -6,7 +6,6 @@ class Graph():
     def __init__(self, persons, connections):
         self.persons = persons
         self.connections = connections
-        print('init')
 
     def draw_graph(self):
         plt.figure(figsize=(14, 9))
@@ -24,7 +23,7 @@ class Graph():
         nx.draw_networkx_nodes(g, pos,
                                nodelist=persons,
                                node_color=self._node_colors(),
-                               node_size=2000,
+                               node_size=1500,
                                alpha=0.85)
         nx.draw_networkx_labels(g, pos, font_size=6)
 

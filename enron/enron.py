@@ -5,7 +5,6 @@ from textblob import TextBlob
 from graph import Graph
 
 
-MAX_CONNECTIONS = 50
 EMAIL_TOKENS = ['subject', 're', 'fw', 'fwd', 'enron']
 HIGH_CONNECTION_THRESHOLD = 50
 
@@ -41,8 +40,8 @@ class Enron():
             print(self.inboxes[-1])
             self.scan_inbox(self.inboxes[-1])
 
-    def highest_connections(self):
-        return self.high_connections[:MAX_CONNECTIONS]
+    def highest_connections(self, max_high_connections):
+        return self.high_connections[:max_high_connections]
 
     def sort_high_connections(self):
         print('Find high connections.')
@@ -55,8 +54,8 @@ class Enron():
         print('Sort high connections.')
         self.high_connections.sort(key=lambda x: x[1], reverse=True)
 
-    def unique_persons(self):
-        for connection in self.high_connections[:MAX_CONNECTIONS]:
+    def unique_persons(self, max_high_connections):
+        for connection in self.high_connections[:max_high_connections]:
             email_addresses = connection[0].split(';')
             self.persons.add(email_addresses[0])
             self.persons.add(email_addresses[1])
@@ -143,12 +142,15 @@ def main():
     # enron.store_connections_json('connections_nouns.json')
     enron.load_connections_json('connections_nouns.json')
     enron.sort_high_connections()
-    persons = enron.unique_persons()
-    connections = enron.highest_connections()
-    print(persons, connections)
 
-    graph = Graph(persons, connections)
-    graph.draw_graph()
+    number_connections = [30, 50, 100, 200, 500]
+    for number in number_connections:
+        persons = enron.unique_persons(number)
+        connections = enron.highest_connections(number)
+        print(persons, connections)
+
+        graph = Graph(persons, connections)
+        graph.draw_graph()
 
 
 if __name__ == '__main__':
