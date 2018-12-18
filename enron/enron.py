@@ -138,7 +138,6 @@ def file_names(directory):
 def main():
     enron = Enron('../maildir/')
     # enron.create_inboxes()
-    # print(enron.connections)
     # enron.store_connections_json('connections_nouns.json')
     enron.load_connections_json('connections_nouns.json')
     enron.sort_high_connections()
@@ -148,7 +147,7 @@ def main():
     for number in number_connections:
         persons = enron.unique_persons(number)
         connections = enron.highest_connections(number)
-        print(persons, connections)
+        # print(persons, connections)
 
         graph = Graph(persons, connections)
         graph.draw_graph()
