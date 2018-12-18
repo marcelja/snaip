@@ -6,7 +6,7 @@ from graph import Graph
 
 
 MAX_CONNECTIONS = 40
-EMAIL_TOKENS = ['subject', 're', 'fw']
+EMAIL_TOKENS = ['subject', 're', 'fw', 'fwd']
 HIGH_CONNECTION_THRESHOLD = 50
 
 
@@ -48,9 +48,12 @@ class Enron():
         print('Find high connections.')
         for key, value in self.connections.items():
             if value[0] >= HIGH_CONNECTION_THRESHOLD:
-                self.high_connections.append((key, value))
+                topic = ''
+                if len(value[1]) > 0:
+                    topic = max(value[1], key=lambda key: value[1][key])
+                self.high_connections.append((key, value[0], topic))
         print('Sort high connections.')
-        self.high_connections.sort(key=lambda x: x[1][0], reverse=True)
+        self.high_connections.sort(key=lambda x: x[1], reverse=True)
 
     def unique_persons(self):
         for connection in self.high_connections[:MAX_CONNECTIONS]:
