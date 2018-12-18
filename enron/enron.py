@@ -1,6 +1,7 @@
 import os
 import json
 from validate_email import validate_email
+# from graph import Graph
 
 
 class Inbox():
@@ -26,6 +27,7 @@ class Enron():
 
         self.connections = {}
         self.high_connections = []
+        self.persons = set()
 
     def create_inboxes(self):
         for inbox_name in self.inbox_names:
@@ -41,6 +43,13 @@ class Enron():
         print('Sort high connections.')
         self.high_connections.sort(key=lambda x: x[1], reverse=True)
         print(self.high_connections[:40])
+
+    def unique_persons(self):
+        for connection in self.high_connections:
+            email_addresses = connection[0].split(';')
+            self.persons.add(email_addresses[0])
+            self.persons.add(email_addresses[1])
+        print(self.persons)
 
     def scan_inbox(self, inbox):
         for folder in inbox.folders:
@@ -108,6 +117,8 @@ def main():
     # enron.store_connections_json('connections.json')
     enron.load_connections_json('connections.json')
     enron.highest_connections()
+    enron.unique_persons()
+
 
 
 if __name__ == '__main__':
