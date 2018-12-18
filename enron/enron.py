@@ -6,7 +6,7 @@ from graph import Graph
 
 
 MAX_CONNECTIONS = 40
-EMAIL_TOKENS = ['subject', 're', 'fw', 'fwd']
+EMAIL_TOKENS = ['subject', 're', 'fw', 'fwd', 'enron']
 HIGH_CONNECTION_THRESHOLD = 50
 
 

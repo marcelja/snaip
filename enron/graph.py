@@ -11,12 +11,13 @@ class Graph():
     def draw_graph(self):
         plt.figure(figsize=(14, 9))
         g = nx.Graph()
+        edge_labels = {}
 
         persons = list(self.persons)
         for connection in self.connections:
             emails = connection[0].split(';')
-            print(connection)
             g.add_edge(emails[0], emails[1])
+            edge_labels[(emails[0], emails[1])] = connection[2]
 
         pos = nx.kamada_kawai_layout(g)
         nx.draw_networkx_nodes(g, pos,
@@ -24,8 +25,11 @@ class Graph():
                                node_color='r',
                                node_size=2000,
                                alpha=0.6)
-        nx.draw_networkx_edges(g, pos, width=1.0, alpha=0.5)
         nx.draw_networkx_labels(g, pos, font_size=6)
+
+        nx.draw_networkx_edges(g, pos, width=1.0, alpha=0.5)
+        nx.draw_networkx_edge_labels(g, pos=nx.kamada_kawai_layout(g),
+                                     edge_labels=edge_labels)
 
         plt.subplots_adjust(bottom=0, top=1, left=0, right=1)
 
