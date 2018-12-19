@@ -138,8 +138,8 @@ def file_names(directory):
 def main():
     enron = Enron('../maildir/')
     # enron.create_inboxes()
-    # enron.store_connections_json('connections_nouns.json')
-    enron.load_connections_json('connections_nouns.json')
+    # enron.store_connections_json('./enron/connections_nouns.json')
+    enron.load_connections_json('./enron/connections_nouns.json')
     enron.sort_high_connections()
 
     number_connections = [35, 50, 100, 200, 500]
