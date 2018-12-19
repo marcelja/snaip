@@ -34,11 +34,11 @@ class Enron():
         self.high_connections = []
         self.persons = set()
 
-    def create_inboxes(self):
+    def scan_inboxes(self):
         for inbox_name in self.inbox_names:
             self.inboxes.append(Inbox(inbox_name, self.directory))
             print(self.inboxes[-1])
-            self.scan_inbox(self.inboxes[-1])
+            self._scan_inbox(self.inboxes[-1])
 
     def highest_connections(self, max_high_connections):
         return self.high_connections[:max_high_connections]
@@ -61,36 +61,39 @@ class Enron():
             self.persons.add(email_addresses[1])
         return self.persons
 
-    def scan_inbox(self, inbox):
+    def _scan_inbox(self, inbox):
         for folder in inbox.folders:
-            self.scan_folder(inbox.path() + '/' + folder)
+            self._scan_folder(inbox.path() + '/' + folder)
 
-    def scan_folder(self, folder_path):
+    def _scan_folder(self, folder_path):
         files = file_names(folder_path)
         for file in files:
             file_path = folder_path + '/' + file
             with open(file_path, 'r') as f:
+                from_address, to_address, subject = None, None, None
                 try:
                     head = [next(f) for x in range(5)]
-                    date = head[1]
+                    # date = head[1]
                     from_address = self.parse_address(head[2], file_path)
                     to_address = self.parse_address(head[3], file_path)
-                    if from_address and to_address:
-                        nouns = self._find_nouns_in_subject(head[4])
-                        self._save_or_update_in_dict(from_address, to_address,
-                                                     date, nouns)
+                    subject = head[4]
                 except:
                     pass
 
+                if from_address and to_address and subject:
+                    nouns = self._find_nouns_in_subject(subject)
+                    self._save_or_update_in_dict(from_address, to_address,
+                                                 nouns)
+
         for folder in folder_names(folder_path):
-            self.scan_folder(folder_path + '/' + folder)
+            self._scan_folder(folder_path + '/' + folder)
 
     @staticmethod
     def _find_nouns_in_subject(subject):
         blob = TextBlob(subject)
         return [noun for noun in blob.noun_phrases if noun not in EMAIL_TOKENS]
 
-    def _save_or_update_in_dict(self, from_address, to_address, date, nouns):
+    def _save_or_update_in_dict(self, from_address, to_address, nouns):
         sorted_from_to = sorted([from_address, to_address])
         identifier = sorted_from_to[0] + ';' + sorted_from_to[1]
         if identifier in self.connections:
@@ -137,7 +140,7 @@ def file_names(directory):
 
 def main():
     enron = Enron('../maildir/')
-    # enron.create_inboxes()
+    # enron.scan_inboxes()
     # enron.store_connections_json('./enron/connections_nouns.json')
     enron.load_connections_json('./enron/connections_nouns.json')
     enron.sort_high_connections()
