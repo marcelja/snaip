@@ -138,6 +138,21 @@ def file_names(directory):
     return [x for x in files if x[0] != '.']
 
 
+def persons_and_connections_to_json(persons, connections, filename):
+    person_list = []
+    connection_list = []
+
+    for person in persons:
+        person_list.append({'id': person, 'name': person})
+    for connection in connections:
+        emails = connection[0].split(';')
+        connection_list.append({'source': emails[0], 'target': emails[1]})
+
+    json_output = {'nodes': person_list, 'links': connection_list}
+    with open(filename, 'w') as f:
+        json.dump(json_output, f)
+
+
 def main():
     enron = Enron('../maildir/')
     # enron.scan_inboxes()
@@ -145,15 +160,16 @@ def main():
     enron.load_connections_json('./enron/connections_nouns.json')
     enron.sort_high_connections()
 
-    number_connections = [35, 50, 100, 200, 500]
-    # number_connections = [35, 50]
+    # number_connections = [35, 50, 100, 200, 500]
+    number_connections = [100]
     for number in number_connections:
         persons = enron.unique_persons(number)
         connections = enron.highest_connections(number)
-        # print(persons, connections)
+        persons_and_connections_to_json(persons, connections, 'js_data.json')
 
         graph = Graph(persons, connections)
-        graph.draw_graph()
+        print(graph)
+        # graph.draw_graph()
 
 
 if __name__ == '__main__':
