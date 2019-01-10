@@ -165,7 +165,8 @@ def main():
     for number in number_connections:
         persons = enron.unique_persons(number)
         connections = enron.highest_connections(number)
-        persons_and_connections_to_json(persons, connections, 'js_data.json')
+        persons_and_connections_to_json(persons, connections,
+                                        './enron/js_data.json')
 
         graph = Graph(persons, connections)
         print(graph)
