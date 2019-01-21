@@ -139,16 +139,19 @@ def file_names(directory):
 
 
 def persons_and_connections_to_json(persons, connections, filename):
-    person_list = []
+    person_dict = {}
     connection_list = []
 
+    id_counter = 0
     for person in persons:
-        person_list.append({'id': person, 'name': person})
+        person_dict[person] = id_counter
+        id_counter += 1
     for connection in connections:
         emails = connection[0].split(';')
-        connection_list.append({'source': emails[0], 'target': emails[1]})
+        connection_list.append({'source': person_dict[emails[0]],
+                                'target': person_dict[emails[1]]})
 
-    json_output = {'nodes': person_list, 'links': connection_list}
+    json_output = {'nodes': person_dict, 'links': connection_list}
     with open(filename, 'w') as f:
         json.dump(json_output, f)
 
